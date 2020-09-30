@@ -15,7 +15,7 @@ SRC_URI += "file://target.cmake \
             "
 
 do_install_append() {
-    install -m 755 "${WORKDIR}/arm_update_cmdline.sh"        "${D}/wigwag/mbed"
-    install -m 755 "${WORKDIR}/arm_update_activate.sh"       "${D}/wigwag/mbed"
-    install -m 755 "${WORKDIR}/arm_update_active_details.sh" "${D}/wigwag/mbed"
+    install -m 755 "${WORKDIR}/arm_update_cmdline.sh"        "${D}/usr/arm"
+    install -m 755 "${WORKDIR}/arm_update_activate.sh"       "${D}/usr/arm"
+    install -m 755 "${WORKDIR}/arm_update_active_details.sh" "${D}/usr/arm"
 }
