@@ -30,6 +30,9 @@ SRC_URI += "\
 "
 
 DEPENDS = " libcap mosquitto mercurial-native"
+#Required in case PELION_API_KEY is provided
+DEPENDS += "python3-native python3-pip-native mercurial-native python3-pyusb-native python3-setuptools-native cmake-native python3-psutil-native"
+
 RDEPENDS_${PN} = " procps bash tar bzip2 rng-tools"
 
 # Installed packages
@@ -71,15 +74,26 @@ SYSTEMD_SERVICE_${PN} = "edge-core.service"
 do_configure_prepend() {
     cd ${S}
     git submodule update --init --recursive
+
+    if [ ! -z "${PELION_API_KEY}" ]; then
+        #Generate a developer cert
+        cd ${S}/lib/mbed-cloud-client
+        export PYTHONPATH=$PYTHONPATH:`pwd`/recipe-sysroot-native/usr/lib/python3.8
+        export PATH=$PYTHONPATH:$PATH
+        pip3 install mbed-cli click==7.0 requests
+        pip3 install pyyaml jsonschema mbed_cloud_sdk jinja2 mbed_ls mbed_host_tests mbed_greentea pyelftools manifest_tool==1.5.2 icetea pycryptodome cmsis_pack_manager cryptography
+        mbed new .
+        mbed config -G CLOUD_SDK_API_KEY "${PELION_API_KEY}"
+        mbed dm init -d "pelion.com" --model-name "mbed-edge-device" -q
+        cp mbed_cloud_dev_credentials.c "${WORKDIR}/mbed_cloud_dev_credentials.c"
+        cd ${S}
+    fi
     [ -f "${WORKDIR}/mbed_cloud_dev_credentials.c" ] && {
         mv "${WORKDIR}/mbed_cloud_dev_credentials.c" config/
     }
     [ -f "${WORKDIR}/update_default_resources.c" ] && {
         mv "${WORKDIR}/update_default_resources.c" config/
     }
-    #dwqdwqd
-    #mkdir -p ${WORKDIR}/build
-    #cd ${WORKDIR}/build
 
     # Temp fix for libwebsockets non-debug build
     patch -p1 < ${WORKDIR}/0003-fix_libwebsockets_nondebug.manual_patch
