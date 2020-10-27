@@ -81,7 +81,7 @@ do_configure_prepend() {
         export PYTHONPATH=$PYTHONPATH:`pwd`/recipe-sysroot-native/usr/lib/python3.8
         export PATH=$PYTHONPATH:$PATH
         pip3 install mbed-cli click==7.0 requests
-        pip3 install pyyaml jsonschema mbed_cloud_sdk jinja2 mbed_ls mbed_host_tests mbed_greentea pyelftools manifest_tool==1.5.2 icetea pycryptodome cmsis_pack_manager cryptography
+        pip3 install pyyaml jsonschema mbed_cloud_sdk jinja2 mbed_ls mbed_host_tests mbed_greentea pyelftools manifest_tool==1.5.2 icetea pycryptodome cmsis_pack_manager cryptography cbor
         mbed new .
         mbed config -G CLOUD_SDK_API_KEY "${PELION_API_KEY}"
         mbed dm init -d "pelion.com" --model-name "mbed-edge-device" -q
