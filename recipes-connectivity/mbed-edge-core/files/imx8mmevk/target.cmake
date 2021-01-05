@@ -2,7 +2,9 @@ MESSAGE ("Building Yocto Linux target")
 SET (OS_BRAND Linux)
 SET (MBED_CLOUD_CLIENT_DEVICE "imx8")
 SET (PAL_TARGET_DEVICE "imx8")
-
+SET (MBED_CLOUD_CLIENT_MIDDLEWARE curl)
+SET (PLATFORM_TARGET Yocto_Generic_YoctoLinux_mbedtls)
+  
 SET (PAL_USER_DEFINED_CONFIGURATION "\"${TARGET_CONFIG_ROOT}/sotp_fs_imx8mmevk_yocto.h\"")
 SET (BIND_TO_ALL_INTERFACES 0)
 SET (PAL_FS_MOUNT_POINT_PRIMARY "\"/userdata/mbed/mcc_config\"")
